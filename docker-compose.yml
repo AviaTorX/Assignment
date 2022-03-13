@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  react-app:
+    image: react-app
+    stdin_open: true
+    ports: 
+      - "3000:3000"
+    networks:
+      - pern-app
+  postgres:
+    image: postgres
+    user: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=momos2^8
+      - POSTGRES_DB=momos
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    networks:
+      - pern-app
+  api-server:
+    image: api-server
+    ports:
+      - "5000:5000"
+    networks:
+      - pern-app
+    depends_on:
+      - postgres
+  
+networks:
+  pern-app:
+    driver: bridge
+volumes:
+  database-data:
+    driver: local
